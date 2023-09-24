@@ -1,0 +1,21 @@
+import tensorflow as tf
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.vgg16 import preprocess_input, decode_predictions
+
+# Load a pre-trained VGG16 model
+model = tf.keras.applications.VGG16(weights='imagenet')
+
+# Load and preprocess the plant leaf image
+img_path = 'plant_leaf.jpg'
+img = image.load_img(img_path, target_size=(224, 224))
+x = image.img_to_array(img)
+x = preprocess_input(x)
+x = np.expand_dims(x, axis=0)
+
+# Make predictions
+preds = model.predict(x)
+decoded_predictions = decode_predictions(preds, top=3)[0]
+
+# Display the top predicted plant classes
+for class_id, class_name, score in decoded_predictions:
+    print(f"{class_name}: {score:.2f}")
